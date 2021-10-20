@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="css/index.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/controller.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <title>Login</title>
+</head>
+
+<body>
+
+    <label id="userName" name="userName"></label>
+
+    <script>
+        $(document).ready(function(){
+            const loggedUser = JSON.parse(sessionStorage.getItem("loggedUser"));
+            document.getElementById("userName").innerHTML = loggedUser.firstName;
+            
+            //get current User data
+            getUserDetails(loggedUser.userId);
+        });
+    </script>
+</body>
+
+</html>
