@@ -1,3 +1,2 @@
 FROM httpd:latest
-WORKDIR /usr/local/apache2/htdocs/
-COPY .
+COPY . /usr/local/apache2/htdocs/
