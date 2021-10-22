@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=1234 -d mysql
+sudo docker run --name phpmyadmin -d --link mysql-server:db -p 8080:80 phpmyadmin
+#cd DB
+#sudo docker-compose up

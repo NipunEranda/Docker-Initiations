@@ -1,16 +1,18 @@
-version: '3'
-
+version: '3.3'
 services:
-
-  mysql-development:
-    image: mysql:8.0.17
+  db:
+    image: mysql:5.7
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: user_db
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: '1234'
     ports:
-      - "3308:3306"
-  
-  admin:    
-    image: adminer    
-    ports:      
-      - "8080:8080"
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+volumes:
+  my-db:
