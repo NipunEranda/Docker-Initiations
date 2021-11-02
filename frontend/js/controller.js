@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:9999/api/";
+const API_URL = "http://3.238.65.88:9999/api/";
 
 //User Login Function
 function userLogin(email, password) {
