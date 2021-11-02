@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS `user_db`;
+/*DROP DATABASE IF EXISTS `user_db`;*/
 
-CREATE DATABASE IF NOT EXISTS `user_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+/*CREATE DATABASE IF NOT EXISTS `user_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;*/
 USE `user_db`;
 
 CREATE TABLE usr_User (

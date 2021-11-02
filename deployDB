@@ -1,7 +1,6 @@
 #!/bin/bash
-sudo docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=1234 --publish 3306:3306 -d mysql
+sudo docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=user_db -e MYSQL_USER=sa -e MYSQL_PASSWORD=1234 --publish 3306:3306 -d mysql
 sudo docker run --name phpmyadmin -d --link mysql-server:db -p 8080:80 phpmyadmin
 containerId=`sudo docker ps -aqf "name=mysql"`
 #sudo docker cp DB/dbScript.sql $containerId:/dbScript.sql
-sudo docker exec -i $containerId mysql -uroot -p1234 mysql < DB/dbScript.sql
-sudo docker exec -i $containerId echo "bind-address            =  127.0.0.1" >> /etc/mysql/conf.d/mysql.cnf
+sudo docker exec -i $containerId mysql -usa -p1234 mysql < DB/dbScript.sql
