@@ -6,12 +6,12 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-	private static final String DB_HOST = "54.227.199.4:3306";
+	private static final String DB_HOST = "3.238.65.88:3306";
 	private static final String DB_NAME = "user_db";
 	
 	private static String DBDriver = "com.mysql.cj.jdbc.Driver";
 	private static String DBUrl = "jdbc:mysql://" + DB_HOST + "/" + DB_NAME + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	private static String DBUser = "spms";
+	private static String DBUser = "root";
 	private static String DBPassword = "1234";
 	
 	private static Connection connection;
