@@ -43,7 +43,7 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
             "lastName": lastName,
             "initials": initials,
             "dob": dob,
-            "phoneNumber": phoneNumber,
+            "phoneNo": phoneNumber,
             "gender": gender,
             "address": address,
             "email": email,
@@ -52,7 +52,7 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
         contentType: "application/json",
         success: function(result){
             console.log(result);
-            if(result.status == "success"){
+            if(result.code == "200"){
                 window.location.href = "index.html";
             }else{
                 window.location.href = "register.html";
