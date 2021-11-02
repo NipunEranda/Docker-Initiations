@@ -93,8 +93,8 @@ public class SQLQueryManager {
 	private final String USER_CHECKEMAILAVAILABILITY = "SELECT userId FROM usr_Login l WHERE l.email = ?";
 	private final String USER_ISACTIVE = "SELECT isActive FROM usr_User WHERE id = ?";
 	private final String USER_REGISTRATION = "CALL user_Registration(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String USER_ALLUSERS = "SELECT * FROM usr_User";
 	private final String USER_DELETEUSER = "CALL user_deleteUser(?, ?)";
+	private final String USER_GETUSERBYID = "SELECT * FROM usr_User WHERE id=?";
 
 	public String getEMAIL_CONFIRMATION() {
 		return EMAIL_CONFIRMATION;
@@ -124,16 +124,14 @@ public class SQLQueryManager {
 		return USER_REGISTRATION;
 	}
 
-	public String getUSER_ALLUSERS() {
-		return USER_ALLUSERS;
+	public String getUSER_GETUSERBYID() {
+		return USER_GETUSERBYID;
 	}
 
-	
 	public String getUSER_DELETEUSER() {
 		return USER_DELETEUSER;
 	}
 
-	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

@@ -2,28 +2,27 @@ package org.sliit.web.api.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sliit.web.api.model.CommonResponse;
 
 public interface UserService {
 
 	// POST
-	public JSONObject registerUser(String firstName, String lastName, String initials, String dob, String phoneNo,
+	public CommonResponse registerUser(String firstName, String lastName, String initials, String dob, String phoneNo,
 			String gender, String address, String email, String password);
 	
-	public JSONObject userLogin(String email, String password);
+	public CommonResponse userLogin(String email, String password);
 
 	// PUT
-	public JSONObject updateUserDetails(String firstName, String lastName, String initials, String dob,
+	public CommonResponse updateUserDetails(String firstName, String lastName, String initials, String dob,
 			String phoneNo, String gender, String address, String id);
 	
-	public JSONObject resetPassword(String currentPassword, String newPassowrd, String email);
+	public CommonResponse resetPassword(String email, String currentPassword, String newPassword);
 
 	// DELETE
-	public JSONObject deleteUser(String id);
+	public CommonResponse deleteUser(String id);
 
 	// GET
-	public JSONObject getUserDetails(String id);
+	public CommonResponse getUserDetails(String id);
 
-	
-	public JSONArray getUserList();
 
 }

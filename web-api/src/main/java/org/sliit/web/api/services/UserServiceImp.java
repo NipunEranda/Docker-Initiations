@@ -2,81 +2,42 @@ package org.sliit.web.api.services;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sliit.web.api.model.CommonResponse;
 
 public class UserServiceImp implements UserService {
 
 	DBManager db = DBManager.getInstance();
-/*
-	@Override
-	public JSONObject registerCustomer(String firstName, String lastName, String initials, String dob, String phoneNo,
-			String gender, String address, String email, String password) {
-		return DBManager.CustomerClass.registerCustomer(firstName, lastName, initials, dob, phoneNo, gender, address,
-				email, password);
-	}
-
-	@Override
-	public JSONObject updateCustomerDetails(String firstName, String lastName, String initials, String dob,
-			String phoneNo, String gender, String address,String id) {
-		return DBManager.CustomerClass.updateCustomerDetails(String.valueOf(id), firstName, lastName, initials, dob, phoneNo, gender, address);
-	}
-
-	@Override
-	public JSONObject deleteCustomer(String id) {
-		return DBManager.CustomerClass.deleteCustomer(id);
-	}
-
-	@Override
-	public JSONObject getCustomerDetails(String id) {
-		return DBManager.CustomerClass.getCustomerById(id);
-	}
-
-	@Override
-	public JSONArray getCustomerList() {
-		return DBManager.CustomerClass.getAllCustomers();
-	}
-*/
 	
 	@Override
-	public JSONObject resetPassword(String currentPassword, String newPassowrd, String email) {
-		return DBManager.LoginClass.resetPassword(email, currentPassword, newPassowrd);
+	public CommonResponse resetPassword(String email, String currentPassword, String newPassword) {
+		return DBManager.LoginClass.resetPassword(email, currentPassword, newPassword);
 	}
 
 	@Override
-	public JSONObject registerUser(String firstName, String lastName, String initials, String dob, String phoneNo,
+	public CommonResponse registerUser(String firstName, String lastName, String initials, String dob, String phoneNo,
 			String gender, String address, String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		return DBManager.UserClass.registerUser(firstName, lastName, initials, dob, phoneNo, gender, address, email, password);
 	}
 
 	@Override
-	public JSONObject userLogin(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
+	public CommonResponse userLogin(String email, String password) {
+		return DBManager.LoginClass.login(email, password);
 	}
 
 	@Override
-	public JSONObject updateUserDetails(String firstName, String lastName, String initials, String dob, String phoneNo,
+	public CommonResponse updateUserDetails(String firstName, String lastName, String initials, String dob, String phoneNo,
 			String gender, String address, String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return DBManager.UserClass.updateUserDetails(id, firstName, lastName, initials, dob, phoneNo, gender, address);
 	}
 
 	@Override
-	public JSONObject deleteUser(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public CommonResponse deleteUser(String id) {
+		return DBManager.UserClass.deleteUser(id);
 	}
 
 	@Override
-	public JSONObject getUserDetails(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JSONArray getUserList() {
-		// TODO Auto-generated method stub
-		return null;
+	public CommonResponse getUserDetails(String id) {
+		return DBManager.UserClass.getUserById(id);
 	}
 
 }

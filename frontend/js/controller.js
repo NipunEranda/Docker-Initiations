@@ -1,7 +1,8 @@
-const API_URL = "http://3.238.65.88:9999/api/";
+const API_URL = "http://localhost:9999/api/";
 
 //User Login Function
 function userLogin(email, password) {
+    document.getElementById("loader").classList.remove("hidden");
     $.ajax({
         type: "POST",
         url: API_URL + "user/login",
@@ -11,18 +12,18 @@ function userLogin(email, password) {
         }),
         contentType: "application/json",
         success: function(result){
-            console.log(result);
-            if(result.status == "success"){
+            if(result.code == "200"){
                 sessionStorage.setItem("loggedUser", JSON.stringify({
-                    "loginId": result.loginId,
-                    "userId": result.userId,
-                    "loginRole": result.loginRole,
-                    "firstName": result.firstName,
-                    "authString": result.authString,
-                    "loginCount": result.loginCount
+                    "loginId": JSON.parse(result.data).loginId,
+                    "userId": JSON.parse(result.data).userId,
+                    "loginRole": JSON.parse(result.data).loginRole,
+                    "firstName": JSON.parse(result.data).firstName,
+                    "authString": JSON.parse(result.data).authString,
+                    "loginCount": JSON.parse(result.data).loginCount
                 }));
                 window.location.href = "home.html";
             }else{
+                document.getElementById("loader").classList.add("hidden");
                 window.location.href = "index.html";
             }
         },

@@ -11,7 +11,7 @@ public class DBConnection {
 	
 	private static String DBDriver = "com.mysql.cj.jdbc.Driver";
 	private static String DBUrl = "jdbc:mysql://" + DB_HOST + "/" + DB_NAME + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	private static String DBUser = "root";
+	private static String DBUser = "user";
 	private static String DBPassword = "1234";
 	
 	private static Connection connection;

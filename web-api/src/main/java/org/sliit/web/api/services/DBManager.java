@@ -10,10 +10,9 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import org.sliit.web.api.model.LoginRequest;
-import org.sliit.web.api.model.LoginResponse;
+import org.sliit.web.api.model.CommonResponse;
 import org.sliit.web.api.model.Role;
+import org.sliit.web.api.model.User;
 import org.sliit.web.api.util.Crypt;
 import org.sliit.web.api.util.DBConnection;
 import org.sliit.web.api.util.RandomCode;
@@ -62,17 +61,16 @@ public class DBManager {
 
 		} catch (Exception e) {
 			j.put("status", "error");
+			System.out.println(e.getMessage());
 		}
 		return j;
 	}
 
-	// Login Management Class
 	static class LoginClass {
 
-		public static JSONObject login(String email, String password) {
-
+		public static CommonResponse login(String email, String password) {
 			JSONObject j = new JSONObject();
-
+			CommonResponse cr = new CommonResponse();
 			PreparedStatement ps_verifyLogin = null;
 			ResultSet rs_verifyLogin = null;
 			Connection con = null;
@@ -104,33 +102,19 @@ public class DBManager {
 						stm.registerOutParameter(2, Types.INTEGER);
 						stm.execute();
 
+						cr.defaultSuccessMessage(j.toString());
+
 					} else {
-						j.put("status", "error");
-						j.put("reason", "Email Confirmation is not validated");
+						cr.defaultErrorMessage();
 					}
 				} else {
-					j.put("status", "error");
-					j.put("userId", 0);
-					j.put("authString", "");
+					cr.defaultErrorMessage();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (rs_verifyLogin != null) {
-					try {
-						rs_verifyLogin.close();
-					} catch (Exception e) {
-						/* ignored */}
-				}
-				if (ps_verifyLogin != null) {
-					try {
-						ps_verifyLogin.close();
-					} catch (Exception e) {
-						/* ignored */}
-				}
+				cr.defaultExceptionMessage(e);
 			}
 
-			return j;
+			return cr;
 		}
 
 		private static JSONObject verifyPassword(String email, String currentPassword) {
@@ -147,73 +131,59 @@ public class DBManager {
 				ps_verifyPassword.setString(1, email);
 
 				ResultSet rs_verifyPassword = ps_verifyPassword.executeQuery();
-
-				if (rs_verifyPassword.first() != false
-						&& SCryptUtil.check(currentPassword, rs_verifyPassword.getString(1))) {
-					j.put("status", "success");
+				if (rs_verifyPassword != null) {
+					if (rs_verifyPassword.first() != false
+							&& SCryptUtil.check(currentPassword, rs_verifyPassword.getString(1))) {
+						j.put("status", "success");
+					} else {
+						j.put("status", "error");
+					}
 				} else {
+					System.out.println("Email doesn't exists");
 					j.put("status", "error");
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (ps_verifyPassword != null) {
-					try {
-						ps_verifyPassword.close();
-					} catch (Exception e) {
-						/* ignored */}
-				}
 			}
 
 			return j;
 		}
 
-		public static JSONObject resetPassword(String email, String currentPassword, String newPassword) {
-			JSONObject j = new JSONObject();
-
+		public static CommonResponse resetPassword(String email, String currentPassword, String newPassword) {
+			CommonResponse cr = new CommonResponse();
 			Connection con = null;
 			CallableStatement stm = null;
 			try {
 				con = DBConnection.connect();
 				JSONObject passwordVerification = verifyPassword(email, currentPassword);
 				if (passwordVerification.getString("status").equalsIgnoreCase("success")) {
-					System.out.println(newPassword);
 					stm = con.prepareCall(sqlObject.getCHANGE_PASSWORD());
 					stm.setString(1, SCryptUtil.scrypt(newPassword, 16, 16, 16));
 					stm.setString(2, email);
 					stm.registerOutParameter(3, Types.INTEGER);
 					stm.execute();
 					if (stm.getInt(3) == 1) {
-						j.put("status", "success");
+						cr.defaultSuccessMessage(null);
 					} else {
-						j.put("status", "error");
+						cr.defaultErrorMessage();
 					}
+				} else {
+					cr.defaultErrorMessage();
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
-				j.put("status", e.getMessage());
-			} finally {
-				if (stm != null) {
-					try {
-						stm.close();
-					} catch (Exception e) {
-					}
-				}
+				cr.defaultExceptionMessage(e);
 			}
-
-			return j;
+			return cr;
 		}
 	}
 
-	// Customer Management Class
+	static class UserClass {
 
-	static class CustomerClass {
-
-		public static JSONObject registerCustomer(String firstName, String lastName, String initials, String dob,
+		public static CommonResponse registerUser(String firstName, String lastName, String initials, String dob,
 				String phoneNo, String gender, String address, String email, String password) {
-			JSONObject j = new JSONObject();
+			CommonResponse cr = new CommonResponse();
 			Connection con = null;
 			CallableStatement stm;
 
@@ -237,26 +207,24 @@ public class DBManager {
 					stm.registerOutParameter(12, Types.INTEGER);
 					stm.execute();
 					if (stm.getInt(12) == 1) {
-						j.put("status", "success");
+						cr.defaultSuccessMessage(null);
 					} else {
-						j.put("status", "error");
+						cr.defaultErrorMessage();
 					}
 				} else {
-					j.put("status", "error");
-					j.put("reason", "email already exist");
+					cr.setResponse("400", "email already exist");
 				}
 
 			} catch (Exception e) {
-				return j.put("status", e.getMessage());
+				cr.defaultExceptionMessage(e);
 			}
 
-			return j;
+			return cr;
 		}
 
-		public static JSONObject updateUserDetails(String id, String firstName, String lastName, String initials,
+		public static CommonResponse updateUserDetails(String id, String firstName, String lastName, String initials,
 				String dob, String phoneNo, String gender, String address) {
-			JSONObject j = new JSONObject();
-
+			CommonResponse cr = new CommonResponse();
 			Connection con = null;
 			CallableStatement stm = null;
 
@@ -275,151 +243,68 @@ public class DBManager {
 				stm.registerOutParameter(9, Types.INTEGER);
 				stm.execute();
 				if (stm.getInt(9) == 1) {
-					j.put("status", "success");
+					cr.defaultSuccessMessage(null);
 				} else {
-					j.put("status", "error");
+					cr.defaultErrorMessage();
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (stm != null) {
-					try {
-						stm.close();
-					} catch (Exception e) {
-					}
-				}
 			}
 
-			return j;
+			return cr;
 		}
 
-		/*public static JSONArray getAllUsers() {
-			JSONArray j = null;
-
+		public static CommonResponse getUserById(String id) {
+			CommonResponse cr = new CommonResponse();
 			Connection con = null;
 			PreparedStatement ps = null;
 			ResultSet rs = null;
-			ArrayList<Customer> customerList = new ArrayList<Customer>();
+			User u;
 
 			try {
 				con = DBConnection.connect();
-				ps = con.prepareStatement(sqlObject.getALlUser);
-				rs = ps.executeQuery();
-				if (rs != null) {
-					while (rs.next()) {
-						LoginResponse l = new LoginResponse();
-						l.setEmail(rs.getString(13));
-						l.setPassword("");
-						l.setLoginRole(Long.parseLong(rs.getString(15)));
-						l.setLoginId(Long.parseLong(rs.getString(1)));
-						Customer c = new Customer(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-								rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), l);
-						customerList.add(c);
-					}
-					j = new JSONArray(customerList);
-				} else {
-					j = null;
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (Exception e) {
-					}
-				}
-				if (ps != null) {
-					try {
-						ps.close();
-					} catch (Exception e) {
-					}
-				}
-			}
-			return j;
-		}*/
-
-		/*public static JSONObject getUserById(String id) {
-			JSONObject j = new JSONObject();
-
-			Connection con = null;
-			PreparedStatement ps = null;
-			ResultSet rs = null;
-
-			try {
-				con = DBConnection.connect();
-				ps = con.prepareStatement(sqlObject.getCUSTOMER_GETCUSTOMERBYID());
+				ps = con.prepareStatement(sqlObject.getUSER_GETUSERBYID());
 				ps.setLong(1, Long.parseLong(id));
 				rs = ps.executeQuery();
 				if (rs != null) {
 					while (rs.next()) {
-						j.put("firstName", rs.getString(2));
-						j.put("lastName", rs.getString(3));
-						j.put("initials", rs.getString(4));
-						j.put("dob", rs.getString(5));
-						j.put("phoneNo", rs.getString(6));
-						j.put("gender", rs.getString(7));
-						j.put("address", rs.getString(8));
-						j.put("email", rs.getString(13));
-						j.put("roleId", rs.getString(15));
+						u = new User(id, rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+								rs.getString(6), rs.getString(7), rs.getString(8));
+						cr.defaultSuccessMessage(new JSONObject(u).toString());
 					}
 				} else {
-					j.put("status", "error");
+					cr.defaultErrorMessage();
 				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (Exception e) {
-					}
-				}
-				if (ps != null) {
-					try {
-						ps.close();
-					} catch (Exception e) {
-					}
-				}
+				cr.defaultExceptionMessage(e);
 			}
-			return j;
-		}*/
+			return cr;
+		}
 
-		public static JSONObject deleteUser(String id) {
-			JSONObject j = new JSONObject();
-
+		public static CommonResponse deleteUser(String id) {
+			CommonResponse cr = new CommonResponse();
 			Connection con = null;
 			CallableStatement stm = null;
 
 			try {
-
 				con = DBConnection.connect();
 				stm = con.prepareCall(sqlObject.getUSER_DELETEUSER());
 				stm.setLong(1, Long.parseLong(id));
 				stm.registerOutParameter(2, Types.INTEGER);
 				stm.execute();
 				if (stm.getInt(2) == 1) {
-					j.put("status", "success");
+					cr.defaultSuccessMessage(null);
 				} else {
-					j.put("status", "error");
+					cr.defaultErrorMessage();
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
-				j.put("status", e.getMessage());
-			} finally {
-				if (stm != null) {
-					try {
-						stm.close();
-					} catch (Exception e) {
-					}
-				}
+				cr.defaultExceptionMessage(e);
 			}
-
-			return j;
+			return cr;
 		}
 	}
 }

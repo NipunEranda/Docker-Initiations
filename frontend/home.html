@@ -20,7 +20,6 @@
             const loggedUser = JSON.parse(sessionStorage.getItem("loggedUser"));
             document.getElementById("userName").innerHTML = loggedUser.firstName;
             
-            //get current User data
             getUserDetails(loggedUser.userId);
         });
     </script>
