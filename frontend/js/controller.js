@@ -1,11 +1,11 @@
-//const API_URL = "http://3.238.65.88:9999/api/";
+const API_URL = "http://localhost:9999/api/";
 
 //User Login Function
 function userLogin(email, password) {
     document.getElementById("loader").classList.remove("hidden");
     $.ajax({
         type: "POST",
-        url: "http://3.238.65.88:9999/api/user/login",
+        url: API_URL + "user/login",
         data: JSON.stringify({
             "email": email,
             "password": password
@@ -37,7 +37,7 @@ function userLogin(email, password) {
 function userRegistration(firstName, lastName, initials, dob, phoneNumber, gender, address, email, password){
     $.ajax({
         type: "POST",
-        url: "http://3.238.65.88:9999/api/user/register",
+        url: API_URL + "user/register",
         data: JSON.stringify({
             "firstName": firstName,
             "lastName": lastName,
@@ -68,7 +68,7 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
 function getUserDetails(id){
     $.ajax({
         type: "GET",
-        url: "http://3.238.65.88:9999/api/user/" + id,
+        url: API_URL + "user/" + id,
         success: function(result){
             console.log(result);
         },
