@@ -1,4 +1,15 @@
-const API_URL = "http://localhost:9999/api/";
+var API_URL = "http://localhost:9999/api/";
+
+$( document ).ready(function() {
+    fetch('../publicIP')
+  .then(response => response.text())
+  .then(text => setAPI_URL(text))
+
+function setAPI_URL(ip){
+        API_URL = "http://" + ip + ":9999/api/"
+}
+
+});
 
 //User Login Function
 function userLogin(email, password) {
