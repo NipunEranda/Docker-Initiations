@@ -1,4 +1,4 @@
 #!/bin/bash
 cd frontend
 sudo docker build -t frontend .
-sudo docker run -it -d -p 80:80 --network="127.0.0.1" --name frontend frontend
+sudo docker run -it -d -p 80:80 --network="0.0.0.0" --name frontend frontend
