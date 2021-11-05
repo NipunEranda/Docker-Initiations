@@ -2,4 +2,4 @@
 cd web-api
 mvn package
 sudo docker build -f src/main/docker/Dockerfile.jvm -t backend .
-sudo docker run -i -d --rm -p 9999:9999 backend
+sudo docker run -i -d --rm -p 9999:9999 --network="127.0.0.1" --name backend backend
