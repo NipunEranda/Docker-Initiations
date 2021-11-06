@@ -76,15 +76,17 @@ function getUserDetails(id) {
             document.getElementById("fullName").innerHTML = (userDetails.firstName + " " + userDetails.lastName);
             document.getElementById("userId").innerHTML = loggedUser.userId;
             document.getElementById("dob").innerHTML = userDetails.dob;
-            document.getElementById("gender").innerHTML = userDetails.gender;
+
             document.getElementById("address").innerHTML = userDetails.address;
             document.getElementById("phoneNo").innerHTML = userDetails.phoneNo;
             document.getElementById("email").innerHTML = loggedUser.email;
 
             if (userDetails.gender == "M") {
                 document.getElementById("profileImage").src = "/frontend/images/male.png"
+                document.getElementById("gender").innerHTML = "Male";
             } else {
                 document.getElementById("profileImage").src = "/frontend/images/female.png"
+                document.getElementById("gender").innerHTML = "Female";
             }
         },
         error: function(result, status) {
