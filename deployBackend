@@ -1,5 +1,4 @@
 #!/bin/bash
-/bin/bash ./getIP
 cd web-api
 mvn package
 sudo docker build -f src/main/docker/Dockerfile.jvm -t backend .
