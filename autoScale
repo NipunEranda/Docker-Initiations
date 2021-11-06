@@ -1,0 +1,7 @@
+#!/bin/bash
+
+kubectl apply -f web-api/deployment.yaml
+kubectl apply -f frontend/deployment.yaml
+
+kubectl autoscale deployment backend --cpu-percent=50 --min=1 --max=10
+kubectl autoscale deployment frontend --cpu-percent=50 --min=1 --max=10
