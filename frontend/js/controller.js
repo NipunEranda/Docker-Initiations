@@ -1,15 +1,4 @@
-var API_URL = "http://localhost:9999/api/";
-
-$( document ).ready(function() {
-    fetch('../publicIP')
-  .then(response => response.text())
-  .then(text => setAPI_URL(text))
-
-function setAPI_URL(ip){
-        API_URL = "http://" + ip + ":9999/api/"
-}
-
-});
+var API_URL = "http://0.0.0.0:9999/api/";
 
 //User Login Function
 function userLogin(email, password) {
@@ -22,8 +11,8 @@ function userLogin(email, password) {
             "password": password
         }),
         contentType: "application/json",
-        success: function(result){
-            if(result.code == "200"){
+        success: function(result) {
+            if (result.code == "200") {
                 sessionStorage.setItem("loggedUser", JSON.stringify({
                     "loginId": JSON.parse(result.data).loginId,
                     "userId": JSON.parse(result.data).userId,
@@ -33,19 +22,18 @@ function userLogin(email, password) {
                     "loginCount": JSON.parse(result.data).loginCount
                 }));
                 window.location.href = "home.html";
-            }else{
-                document.getElementById("loader").classList.add("hidden");
+            } else {
                 window.location.href = "index.html";
             }
         },
-        error: function(result, status){
+        error: function(result, status) {
             console.log(result);
         }
     });
 }
 
 //User Registration Function
-function userRegistration(firstName, lastName, initials, dob, phoneNumber, gender, address, email, password){
+function userRegistration(firstName, lastName, initials, dob, phoneNumber, gender, address, email, password) {
     $.ajax({
         type: "POST",
         url: API_URL + "user/register",
@@ -61,29 +49,29 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
             "password": password
         }),
         contentType: "application/json",
-        success: function(result){
+        success: function(result) {
             console.log(result);
-            if(result.code == "200"){
+            if (result.code == "200") {
                 window.location.href = "index.html";
-            }else{
+            } else {
                 window.location.href = "register.html";
             }
         },
-        error: function(result, status){
+        error: function(result, status) {
             console.log(result);
         }
     });
 }
 
 //Get User Details
-function getUserDetails(id){
+function getUserDetails(id) {
     $.ajax({
         type: "GET",
         url: API_URL + "user/" + id,
-        success: function(result){
+        success: function(result) {
             console.log(result);
         },
-        error: function(result, status){
+        error: function(result, status) {
             console.log(result);
         }
     });

@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.eclipse.microprofile.config.ConfigProvider;
+
 public class DBConnection {
 
-	private static final String DB_HOST = "3.238.65.88:3306";
+	private static final String DB_HOST = ConfigProvider.getConfig().getValue("DBHOST", String.class) + ":3306";
 	private static final String DB_NAME = "user_db";
 	
 	private static String DBDriver = "com.mysql.cj.jdbc.Driver";
