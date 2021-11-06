@@ -57,7 +57,7 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
                 alert("Registered successfully!");
                 window.location.href = "index.html";
             } else {
-                window.location.href = "register.html";
+                //window.location.href = "register.html";
             }
         },
         error: function(result, status) {

@@ -23,5 +23,5 @@ echo -e "\n${GREEN}Deploying Database${NC}\n"
 echo -e "\n${GREEN}Configuring Firewall${NC}\n"
 /bin/bash ./configureFirewall
 
-echo -e "\n${GREEN}Setup Autoscaling${NC}\n"
-/bin/bash ./autoScale
+#echo -e "\n${GREEN}Setup Autoscaling${NC}\n"
+#/bin/bash ./autoScale
