@@ -24,6 +24,7 @@ function userLogin(email, password) {
                 }));
                 window.location.href = "home.html";
             } else {
+                alert("Credentials are invalid");
                 window.location.href = "index.html";
             }
         },
@@ -53,6 +54,7 @@ function userRegistration(firstName, lastName, initials, dob, phoneNumber, gende
         success: function(result) {
             console.log(result);
             if (result.code == "200") {
+                alert("Registered successfully!");
                 window.location.href = "index.html";
             } else {
                 window.location.href = "register.html";
@@ -82,10 +84,10 @@ function getUserDetails(id) {
             document.getElementById("email").innerHTML = loggedUser.email;
 
             if (userDetails.gender == "M") {
-                document.getElementById("profileImage").src = "/frontend/images/male.png"
+                document.getElementById("profileImage").src = "../images/male.png"
                 document.getElementById("gender").innerHTML = "Male";
             } else {
-                document.getElementById("profileImage").src = "/frontend/images/female.png"
+                document.getElementById("profileImage").src = "../images/female.png"
                 document.getElementById("gender").innerHTML = "Female";
             }
         },
