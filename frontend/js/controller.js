@@ -16,6 +16,7 @@ function userLogin(email, password) {
                 sessionStorage.setItem("loggedUser", JSON.stringify({
                     "loginId": JSON.parse(result.data).loginId,
                     "userId": JSON.parse(result.data).userId,
+                    "email": email,
                     "loginRole": JSON.parse(result.data).loginRole,
                     "firstName": JSON.parse(result.data).firstName,
                     "authString": JSON.parse(result.data).authString,
@@ -69,10 +70,31 @@ function getUserDetails(id) {
         type: "GET",
         url: API_URL + "user/" + id,
         success: function(result) {
-            console.log(result);
+            sessionStorage.setItem("userDetails", result.data);
+            const loggedUser = JSON.parse(sessionStorage.getItem("loggedUser"));
+            const userDetails = JSON.parse(result.data);
+            document.getElementById("fullName").innerHTML = (userDetails.firstName + " " + userDetails.lastName);
+            document.getElementById("userId").innerHTML = loggedUser.userId;
+            document.getElementById("dob").innerHTML = userDetails.dob;
+            document.getElementById("gender").innerHTML = userDetails.gender;
+            document.getElementById("address").innerHTML = userDetails.address;
+            document.getElementById("phoneNo").innerHTML = userDetails.phoneNo;
+            document.getElementById("email").innerHTML = loggedUser.email;
+
+            if (userDetails.gender == "M") {
+                document.getElementById("profileImage").src = "/frontend/images/male.png"
+            } else {
+                document.getElementById("profileImage").src = "/frontend/images/female.png"
+            }
         },
         error: function(result, status) {
             console.log(result);
         }
     });
+}
+
+function logout() {
+    sessionStorage.removeItem("loggedUser");
+    sessionStorage.removeItem("userDetails");
+    window.location.href = "index.html";
 }
